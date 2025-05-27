@@ -5,6 +5,11 @@ use sui::coin::TreasuryCap;
 
 use narval_faucet::faucet::{Self, FaucetRegistry, FaucetAdmin};
 
+entry fun create_faucet_cap_to(receiver: address, ctx: &mut TxContext) {
+    let cap = faucet::create_faucet_admin(ctx);
+    transfer::public_transfer(cap, receiver);
+}
+
 entry fun add_coin_config<T>(
     registry: &mut FaucetRegistry,
     treasury_cap: TreasuryCap<T>,

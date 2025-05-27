@@ -224,6 +224,15 @@ public fun resume_mint<T>(
     config.can_mint = true;
 }
 
+/// Create a new FaucetAdmin object and transfer it to the receiver
+public fun create_faucet_admin(
+    ctx: &mut TxContext
+): FaucetAdmin {
+    FaucetAdmin {
+        id: object::new(ctx),
+    }
+}
+
 #[test_only]
 public fun init_for_testing(ctx: &mut TxContext) {
     init(ctx);
