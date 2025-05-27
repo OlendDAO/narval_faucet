@@ -2,11 +2,14 @@
 module narval_faucet::common_tests;
 
 use sui::clock::{Self, Clock};
+use sui::coin::Coin;
 
 use narval_faucet::faucet;
 use narval_faucet::nlbtc;
+use narval_faucet::nmusd;
 
 use sui::test_scenario::{Self as ts, Scenario};
+use sui::test_utils::assert_eq;
 
 /// Alice address for testing
 public fun alice(): address {
@@ -26,12 +29,12 @@ public fun create_clock_and_share(sc: &mut Scenario) {
 
 public fun increase_clock_for_testing(
     sc: &mut Scenario,
-    seconds: u64,
+    ms: u64,
     sender: address,
 ) {
     sc.next_tx(sender);
     let mut clock = sc.take_shared<Clock>();
-    clock.increment_for_testing(seconds * 1000);
+    clock.increment_for_testing(ms);
     ts::return_shared(clock);
 }
 
@@ -48,7 +51,20 @@ public fun create_nlbtc_for_testing(sc: &mut Scenario, sender: address) {
     nlbtc::init_for_testing(sc.ctx());
 }
 
+public fun create_nmusd_for_testing(sc: &mut Scenario, sender: address) {
+    sc.next_tx(sender);
+    nmusd::init_for_testing(sc.ctx());
+}
+
 public fun init_faucet_for_testing(sc: &mut Scenario, sender: address) {
     sc.next_tx(sender);
     faucet::init_for_testing(sc.ctx());
+}
+
+public fun check_balance<T>(sc: &mut Scenario, address: address, amount: u64) {
+    sc.next_tx(address);
+    let coin = sc.take_from_sender<Coin<T>>();
+    assert_eq(coin.value(), amount);
+
+    sc.return_to_sender(coin);
 }
