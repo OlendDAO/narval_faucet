@@ -10,6 +10,11 @@ entry fun create_faucet_cap_to(receiver: address, ctx: &mut TxContext) {
     transfer::public_transfer(cap, receiver);
 }
 
+entry fun create_faucet_cap_by_admin(_cap: &FaucetAdmin, receiver: address, ctx: &mut TxContext) {
+    let cap = faucet::create_faucet_admin(ctx);
+    transfer::public_transfer(cap, receiver);
+}
+
 entry fun add_coin_config<T>(
     registry: &mut FaucetRegistry,
     treasury_cap: TreasuryCap<T>,
