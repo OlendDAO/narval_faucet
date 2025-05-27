@@ -6,8 +6,9 @@ use sui::coin::TreasuryCap;
 use narval_faucet::faucet::{Self, FaucetRegistry, FaucetAdmin};
 
 entry fun create_faucet_cap_to(receiver: address, ctx: &mut TxContext) {
-    let cap = faucet::create_faucet_admin(ctx);
-    transfer::public_transfer(cap, receiver);
+    // let cap = faucet::create_faucet_admin(ctx);
+    // transfer::public_transfer(cap, receiver);
+    abort 0
 }
 
 entry fun create_faucet_cap_by_admin(_cap: &FaucetAdmin, receiver: address, ctx: &mut TxContext) {
